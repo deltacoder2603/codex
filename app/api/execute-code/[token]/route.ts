@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { token: string } }
-) {
+type Props = {
+  params: {
+    token: string;
+  };
+};
+
+export async function GET(request: NextRequest, { params }: Props) {
   try {
     const rapidApiKey = process.env.NEXT_PUBLIC_RAPIDAPI_KEY;
 
