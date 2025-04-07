@@ -65,11 +65,13 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
 
+      // Handle different types of outputs
       if (result.stdout) {
         setOutput(result.stdout);
       } else if (result.stderr) {
@@ -78,11 +80,15 @@ export default function Home() {
         setOutput(`Compilation error: ${result.compile_output}`);
       } else if (result.message) {
         setOutput(`Message: ${result.message}`);
+      } else if (result.error) {
+        setOutput(`Error: ${result.error}`);
+      } else if (result.status && result.status.description) {
+        setOutput(`Status: ${result.status.description}`);
       } else {
-        setOutput("Execution completed but no output was generated.");
+        setOutput("No output generated. Please check your code.");
       }
-    } catch (error) {
-      setOutput(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    } catch (err) {
+      setOutput(`Error: ${err instanceof Error ? err.message : String(err)}`);
     }
 
     setLoading(false);
