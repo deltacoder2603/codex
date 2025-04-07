@@ -27,7 +27,7 @@ export function CodeAssistantSidebar({ isOpen, onClose }: CodeAssistantSidebarPr
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent | React.KeyboardEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     if (!input.trim()) return;
 
