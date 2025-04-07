@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiCode, FiX, FiSend, FiCpu } from 'react-icons/fi';
+import { FiX, FiSend, FiCpu } from 'react-icons/fi';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -16,7 +16,7 @@ interface CodeAssistantSidebarProps {
 // Change to named export
 export function CodeAssistantSidebar({ isOpen, onClose }: CodeAssistantSidebarProps) {
   const [input, setInput] = useState('');
-  const [language, setLanguage] = useState('python');
+  // Remove unused state
   const [messages, setMessages] = useState<Array<{text: string, sender: 'user' | 'bot'}>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -52,9 +52,9 @@ export function CodeAssistantSidebar({ isOpen, onClose }: CodeAssistantSidebarPr
   };
 
   // Function to format bot messages with code highlighting
+  // Fix TypeScript any types
   const formatBotMessage = (message: string) => {
     try {
-      // Split the message by code blocks
       const parts = message.split(/```(\w+)?\n/);
       
       return (
@@ -64,11 +64,9 @@ export function CodeAssistantSidebar({ isOpen, onClose }: CodeAssistantSidebarPr
               return null;
             }
             
-            // If this is a code block language identifier
             if (index % 3 === 1) {
-              return null; // Skip the language identifier part
+              return null;
             }
-            // If this is a code block content
             else if (index % 3 === 2) {
               const language = parts[index - 1] || 'javascript';
               const codeContent = part.replace(/```$/, '');
@@ -76,7 +74,7 @@ export function CodeAssistantSidebar({ isOpen, onClose }: CodeAssistantSidebarPr
               return (
                 <div key={index} className="my-4 relative group">
                   <SyntaxHighlighter
-                    style={vscDarkPlus as any}
+                    style={vscDarkPlus}
                     language={language}
                     showLineNumbers={true}
                     className="rounded-lg !bg-[#1a1a1a] !p-4"
@@ -113,8 +111,8 @@ export function CodeAssistantSidebar({ isOpen, onClose }: CodeAssistantSidebarPr
           })}
         </div>
       );
-    } catch (error) {
-      // If there's any error in parsing, display the message as plain text
+    } catch {
+      // Remove unused error parameter
       return <div className="whitespace-pre-wrap">{message}</div>;
     }
   };
