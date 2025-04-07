@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import axios from 'axios';
 
 export async function GET(
   request: NextRequest,
@@ -15,36 +16,32 @@ export async function GET(
       );
     }
 
-    // Use node-fetch compatible options
-    const response = await fetch(
-      `https://judge0-ce.p.rapidapi.com/submissions/${context.params.token}?fields=*`,
-      {
-        method: 'GET',
-        headers: {
-          "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
-          "X-RapidAPI-Key": rapidApiKey,
-          "Accept": "application/json",
-        },
+    // Use axios instead of fetch
+    const response = await axios({
+      method: 'GET',
+      url: `https://judge0-ce.p.rapidapi.com/submissions/${context.params.token}`,
+      headers: {
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+        "X-RapidAPI-Key": rapidApiKey,
+        "Accept": "application/json",
       }
-    );
+    });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Judge0 API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorText
-      });
-      return NextResponse.json(
-        { error: `API error: ${errorText}` },
-        { status: response.status }
-      );
-    }
-
-    const result = await response.json();
-    return NextResponse.json(result);
+    return NextResponse.json(response.data);
   } catch (error) {
     console.error("API route error:", error);
+    
+    // Improved error handling for axios errors
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status || 500;
+      const errorMessage = error.response?.data || error.message;
+      
+      return NextResponse.json(
+        { error: `API error: ${JSON.stringify(errorMessage)}` },
+        { status }
+      );
+    }
+    
     return NextResponse.json(
       { error: `Server error: ${error instanceof Error ? error.message : String(error)}` },
       { status: 500 }
