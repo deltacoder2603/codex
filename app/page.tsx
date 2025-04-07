@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Editor from "@monaco-editor/react";
 import { FiPlay, FiCode, FiTerminal, FiSettings } from "react-icons/fi";
 import { motion } from "framer-motion";
