@@ -5,6 +5,7 @@ import Editor from "@monaco-editor/react";
 import { FiPlay, FiCode, FiTerminal } from 'react-icons/fi';
 import { motion } from "framer-motion";
 
+// Language options remain the same
 const languageDefaults: Record<string, string> = {
   python: `# Python code
 a = int(input())
@@ -33,13 +34,7 @@ class Main {
 }`,
 };
 
-// Judge0 language IDs
-const languageIds: Record<string, number> = {
-  python: 71, // Python 3
-  cpp: 54,    // C++ (GCC 9.2.0)
-  java: 62,   // Java (OpenJDK 13.0.1)
-};
-
+// We don't need language IDs for Gemini
 export default function Home() {
   const [language, setLanguage] = useState("python");
   const [code, setCode] = useState(languageDefaults["python"]);
@@ -58,9 +53,9 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          language_id: languageIds[language],
-          source_code: code,
-          stdin: input
+          language,
+          code,
+          input
         })
       });
 
@@ -71,19 +66,10 @@ export default function Home() {
 
       const result = await response.json();
       
-      // Handle the output directly
-      if (result.stdout) {
-        setOutput(result.stdout);
-      } else if (result.stderr) {
-        setOutput(`Error: ${result.stderr}`);
-      } else if (result.compile_output) {
-        setOutput(`Compilation error: ${result.compile_output}`);
-      } else if (result.message) {
-        setOutput(`Message: ${result.message}`);
+      if (result.output) {
+        setOutput(result.output);
       } else if (result.error) {
         setOutput(`Error: ${result.error}`);
-      } else if (result.status?.description) {
-        setOutput(`Status: ${result.status.description}`);
       } else {
         setOutput("No output generated. Please check your code.");
       }
