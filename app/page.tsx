@@ -69,57 +69,21 @@ export default function Home() {
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
-      let executionResult = await response.json();
-
-      // If status is "In Queue" or "Processing", poll for results
-      if (executionResult.status?.id <= 2) {
-        let attempts = 0;
-        const maxAttempts = 10;
-        const pollInterval = 1000; // 1 second
-
-        while (attempts < maxAttempts) {
-          setOutput(`Status: ${executionResult.status.description}... Please wait.`);
-          await new Promise(resolve => setTimeout(resolve, pollInterval));
-
-          const pollResponse = await fetch(`/api/execute-code/${executionResult.token}`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-
-          if (!pollResponse.ok) {
-            throw new Error(`Polling error: ${pollResponse.status}`);
-          }
-
-          const pollResult = await pollResponse.json();
-          
-          // Check if execution is complete
-          if (pollResult.status.id > 2) {
-            executionResult = pollResult;
-            break;
-          }
-
-          attempts++;
-        }
-
-        if (attempts >= maxAttempts) {
-          throw new Error('Execution timeout: Process took too long');
-        }
-      }
-
-      // Handle final output
-      if (executionResult.stdout) {
-        setOutput(executionResult.stdout);
-      } else if (executionResult.stderr) {
-        setOutput(`Error: ${executionResult.stderr}`);
-      } else if (executionResult.compile_output) {
-        setOutput(`Compilation error: ${executionResult.compile_output}`);
-      } else if (executionResult.message) {
-        setOutput(`Message: ${executionResult.message}`);
-      } else if (executionResult.error) {
-        setOutput(`Error: ${executionResult.error}`);
-      } else if (executionResult.status?.description) {
-        setOutput(`Status: ${executionResult.status.description}`);
+      const result = await response.json();
+      
+      // Handle the output directly
+      if (result.stdout) {
+        setOutput(result.stdout);
+      } else if (result.stderr) {
+        setOutput(`Error: ${result.stderr}`);
+      } else if (result.compile_output) {
+        setOutput(`Compilation error: ${result.compile_output}`);
+      } else if (result.message) {
+        setOutput(`Message: ${result.message}`);
+      } else if (result.error) {
+        setOutput(`Error: ${result.error}`);
+      } else if (result.status?.description) {
+        setOutput(`Status: ${result.status.description}`);
       } else {
         setOutput("No output generated. Please check your code.");
       }
