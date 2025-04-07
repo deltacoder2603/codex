@@ -216,9 +216,9 @@ export function CodeAssistantSidebar({ isOpen, onClose }: CodeAssistantSidebarPr
                 placeholder="Ask about code..."
                 className="w-full p-4 bg-[#252525] text-gray-200 border border-[#333] rounded-lg focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none font-mono text-sm"
                 rows={3}
-                onKeyDown={(e) => {
+                onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                   if (e.key === 'Enter' && e.ctrlKey) {
-                    handleSubmit(e as any);
+                    handleSubmit(e);
                   }
                 }}
               />
