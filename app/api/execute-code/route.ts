@@ -27,10 +27,9 @@ export async function POST(req: NextRequest) {
         language_id,
         source_code,
         stdin,
-        wait: true
+        wait: true  // This tells Judge0 to wait for the result
       },
-      timeout: 10000, // 10 second timeout
-      timeoutErrorMessage: 'Request to Judge0 API timed out'
+      timeout: 15000 // 15 second timeout
     });
     
     const submission = submitResponse.data;
@@ -50,8 +49,7 @@ export async function POST(req: NextRequest) {
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
         "X-RapidAPI-Key": rapidApiKey,
       },
-      timeout: 10000, // 10 second timeout
-      timeoutErrorMessage: 'Request to Judge0 API timed out'
+      timeout: 15000 // 15 second timeout
     });
 
     return NextResponse.json(resultResponse.data);
