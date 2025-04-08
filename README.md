@@ -1,6 +1,6 @@
 # CodeX - Online Code Execution Platform
 
-A modern web application that allows users to write, execute, and share code snippets in multiple programming languages.
+A modern web application that allows users to write, execute, and share code snippets in multiple programming languages, with an integrated AI coding assistant.
 
 ## Features
 
@@ -9,12 +9,14 @@ A modern web application that allows users to write, execute, and share code sni
 - **Input Support**: Test your code with custom inputs
 - **Error Handling**: Clear error messages for debugging
 - **Responsive Design**: Works on desktop and mobile devices
+- **AI Coding Assistant**: Get help with your code using our Gemini-powered assistant
 
 ## Technology Stack
 
 - **Frontend**: Next.js, React, TypeScript
 - **Backend**: Next.js API Routes
 - **Code Execution**: Piston API
+- **AI Assistant**: Gemini API
 - **Styling**: Tailwind CSS
 
 ## Getting Started
@@ -42,6 +44,7 @@ A modern web application that allows users to write, execute, and share code sni
 3. Create a **.env.local** file in the root directory with the following variables:
    ```
    NEXT_PUBLIC_RAPIDAPI_KEY=your_rapidapi_key_here
+   GEMINI_API_KEY=your_gemini_api_key_here
    ```
 
 4. Start the development server
@@ -61,9 +64,17 @@ A modern web application that allows users to write, execute, and share code sni
 4. Click "Run" to execute the code
 5. View the output in the results panel
 
+### Using the AI Coding Assistant
+
+1. Click on the "AI Assistant" button while working on your code
+2. Ask questions or request help with specific coding problems
+3. The Gemini-powered assistant will provide suggestions, explain concepts, or help debug your code
+4. Apply the suggested changes directly to your code editor
+
 ## API Integration
 
-CodeX uses the Piston API through RapidAPI for code execution. The API handles compilation and execution of code in various programming languages securely in isolated environments.
+- **Piston API**: Used through RapidAPI for secure code execution in isolated environments
+- **Gemini API**: Powers the intelligent coding assistant for code generation, debugging, and explanation
 
 ## Deployment
 
@@ -92,7 +103,10 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Acknowledgments
 
 - **Piston API** for code execution
+- **Gemini API** for AI-powered coding assistance
 - **Next.js** for the React framework
 - **Tailwind CSS** for styling
 
 ---
+
+Made with ❤️ by [Your Name]
